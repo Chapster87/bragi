@@ -1,8 +1,8 @@
 .nav-link {
-  @apply text-gray-300 hover:bg-gray-700 hover:text-white;
+  @apply text-slate-300 hover:bg-slate-700 hover:text-white;
 
   &.current {
-    @apply bg-gray-900 text-white;
+    @apply bg-slate-950 text-white;
   }
 }
 
