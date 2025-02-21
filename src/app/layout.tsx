@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { BreakpointIndicator } from "@/components/BreakpointIndicator";
+import BreakpointIndicator from "@/components/BreakpointIndicator";
 import "@/styles/app.css";
 
 const geistSans = Geist({

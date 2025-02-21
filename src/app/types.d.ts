@@ -20,8 +20,29 @@ interface UserProfile {
   uri: string;
 }
 
+interface NowPlaying {
+  item: Track;
+  progress_ms: number;
+  is_playing: boolean;
+}
+
 interface Image {
   url: string;
   height: number;
   width: number;
+}
+
+interface Track {
+  name: string;
+  artists: Artist[];
+  album: Album;
+  duration_ms: number;
+}
+
+interface Artist {
+  name: string;
+}
+
+interface Album {
+  images: { url: string }[];
 }
