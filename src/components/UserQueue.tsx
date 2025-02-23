@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import Spotify from '@/services/spotify'
 
-export default function TopTracks() {
+export default function UserQueue() {
   const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null);
   const [queue, setQueue] = useState([]);
 

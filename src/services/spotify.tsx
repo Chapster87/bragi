@@ -148,6 +148,20 @@ export default class Spotify {
     return await response.json();
   }
 
+  async fetchUserHistory(): Promise<Track> {
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch("https://api.spotify.com/v1/me/player/recently-played", {
+      method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
+    });
+
+    if (response.status > 400) {
+      throw new Error('Unable to Fetch Queue');
+      return null;
+    }
+  
+    return await response.json();
+  }
+
   async play() {
     try {
       const accessToken = localStorage.getItem('access_token');
