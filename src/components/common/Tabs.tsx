@@ -9,7 +9,6 @@ interface TabsProps {
 }
 
 export function Tabs(props: TabsProps) {
-  console.log('Tabs', props);
   const [defaultTab, setDefaultTab] = useState(props.defaultTab ? props.defaultTab : 0);
 
   function updateTab(index: number) {
@@ -28,7 +27,6 @@ export function Tabs(props: TabsProps) {
 }
 
 export function TabsHeader(props: TabsProps) {
-  console.log('TabsHeader', props);
   const defaultTab = props.defaultTab ? props.defaultTab : 0;
 
   function changeTab(index: number) {
@@ -40,7 +38,7 @@ export function TabsHeader(props: TabsProps) {
   return (
     <div className={`tabs-header ${props.className ? props.className : ''}`}>
       {Children.map(props.children, (child, index) => {
-        if (React.isValidElement<{ active?: boolean }>(child)) {
+        if (React.isValidElement<{ active?: boolean, changeTab?: (index: number) => void }>(child)) {
           return React.cloneElement(child, { active: index === defaultTab && true, changeTab: () => changeTab(index) });
         }
       })}
@@ -49,7 +47,6 @@ export function TabsHeader(props: TabsProps) {
 }
 
 export function Tab(props: TabsProps) {
-  console.log('Tab', props);
   return (
     <button className={`tab${props.active ? ' active' : ''} ${props.className ? props.className : ''}`} type="button" onClick={props.active ? undefined : props.changeTab}>
       {props.children}
@@ -58,7 +55,6 @@ export function Tab(props: TabsProps) {
 }
 
 export function TabsBody(props: TabsProps) {
-  console.log('TabsBody', props);
   const defaultTab = props.defaultTab ? props.defaultTab : 0;
   return (
     <div className={`tabs-body ${props.className ? props.className : ''}`}>
@@ -72,7 +68,6 @@ export function TabsBody(props: TabsProps) {
 }
 
 export function TabPanel(props: TabsProps) {
-  console.log('TabPanel', props);
   return (
     <div className={`tab-panel${props.active ? ' block active' : ' hidden'} ${props.className && props.className}`}>
       {props.children}
