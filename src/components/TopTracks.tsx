@@ -18,7 +18,7 @@ export default function TopTracks() {
     <>
       {tracks && tracks.length > 0 &&
         <>
-          <h2>Top Tracks</h2>
+          <h2 className="block font-bold text-lg mb-2">Top Tracks:</h2>
           <div className="flex flex-wrap gap-2">
             {tracks.map((track) => (
               <div className="flex items-center w-full" key={track.id}>

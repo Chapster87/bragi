@@ -5,6 +5,7 @@ export default class Spotify {
   params: URLSearchParams;
   code: string | null;
   redirectUri: string;
+  scope: string;
 
   constructor() {
     this.clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
@@ -13,6 +14,7 @@ export default class Spotify {
     this.params = new URLSearchParams(window.location.search);
     this.code = this.params.get("code");
     this.redirectUri = "http://localhost:3000/";
+    this.scope = 'user-read-private user-read-email user-top-read user-read-currently-playing user-read-recently-played user-read-playback-state user-modify-playback-state'
   }
 
   async auth() {
@@ -30,7 +32,7 @@ export default class Spotify {
   async redirectToAuthCodeFlow() {
     const verifier = this.generateCodeVerifier(128);
     const codeChallenge = await this.generateCodeChallenge(verifier);
-    const scope = 'user-read-private user-read-email user-top-read user-read-currently-playing user-read-recently-played user-read-playback-state';
+    const scope = this.scope;
     const authUrl = new URL("https://accounts.spotify.com/authorize");
 
     localStorage.setItem("code_verifier", verifier);
@@ -117,25 +119,95 @@ export default class Spotify {
   }
 
   async fetchNowPlaying(): Promise<Track> {
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
+      method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
+    });
+
+    if (response.status > 400) {
+      throw new Error('Unable to Fetch Song');
+      return null;
+    } else if(response.status === 204) { //The response was fetched but there was no content
+      return null;
+    }
+  
+    return await response.json();
+  }
+
+  async fetchUserQueue(): Promise<Track> {
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch("https://api.spotify.com/v1/me/player/queue", {
+      method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
+    });
+
+    if (response.status > 400) {
+      throw new Error('Unable to Fetch Queue');
+      return null;
+    }
+  
+    return await response.json();
+  }
+
+  async play() {
     try {
       const accessToken = localStorage.getItem('access_token');
-      if (!accessToken) {
-        throw new Error("Access token is missing");
-      }
-
-      const response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-        method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
+      const response = await fetch("https://api.spotify.com/v1/me/player/play", {
+        method: "PUT", headers: { Authorization: `Bearer ${accessToken}` }
       });
 
       if (response.status > 400) {
-        throw new Error('Unable to Fetch Song');
-      } else if(response.status === 204) { //The response was fetched but there was no content
-        throw new Error('Currently Not Playing')
+        throw new Error('Unable to resume/play');
       }
-    
-      return await response.json();
     } catch (error) {
-      console.error('Error fetching now playing: ', error);
+      console.error('Error resume/play: ', error);
+      return error.message.toString();
+    }
+  }
+
+  async pause() {
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      const response = await fetch("https://api.spotify.com/v1/me/player/pause", {
+        method: "PUT", headers: { Authorization: `Bearer ${accessToken}` }
+      });
+
+      if (response.status > 400) {
+        throw new Error('Unable to pause playback');
+      }
+    } catch (error) {
+      console.error('Error pausing playback: ', error);
+      return error.message.toString();
+    }
+  }
+
+  async skipPrev() {
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      const response = await fetch("https://api.spotify.com/v1/me/player/previous", {
+        method: "POST", headers: { Authorization: `Bearer ${accessToken}` }
+      });
+
+      if (response.status > 400) {
+        throw new Error('Unable to skip to previous');
+      }
+    } catch (error) {
+      console.error('Error skipping to previous: ', error);
+      return error.message.toString();
+    }
+  }
+
+  async skipNext() {
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      const response = await fetch("https://api.spotify.com/v1/me/player/next", {
+        method: "POST", headers: { Authorization: `Bearer ${accessToken}` }
+      });
+
+      if (response.status > 400) {
+        throw new Error('Unable to skip to next');
+      }
+    } catch (error) {
+      console.error('Error skipping to next: ', error);
       return error.message.toString();
     }
   }
