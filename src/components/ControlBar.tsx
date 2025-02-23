@@ -104,17 +104,17 @@ export default function ControlBar() {
             </div>
             <div className="flex flex-col items-center justify-center w-1/3">
               <div className="flex items-center justify-center mb-3">
-                <button className="btn-prev cursor-pointer" type="button" onClick={() => prevTrack()} aria-label="Skip to Previous Track"><SkipBack /></button>
-                {playerState === 'PAUSE' && <button className="btn-play cursor-pointer" type="button" onClick={() => playTrack()} aria-label="Play Track"><Play /></button>}
-                {playerState === 'PLAY' && <button className="btn-pause cursor-pointer" type="button" onClick={() => pauseTrack()} aria-label="Pause Track"><Pause /></button>}
-                <button className="btn-next cursor-pointer" type="button" onClick={() => nextTrack()} aria-label="Skip to Next Track"><SkipForward /></button>
+                <button className="btn-prev" type="button" onClick={() => prevTrack()} aria-label="Skip to Previous Track"><SkipBack /></button>
+                {playerState === 'PAUSE' && <button className="btn-play" type="button" onClick={() => playTrack()} aria-label="Play Track"><Play /></button>}
+                {playerState === 'PLAY' && <button className="btn-pause" type="button" onClick={() => pauseTrack()} aria-label="Pause Track"><Pause /></button>}
+                <button className="btn-next" type="button" onClick={() => nextTrack()} aria-label="Skip to Next Track"><SkipForward /></button>
               </div>
               <div className="flex items-center justify-center">
                 <div className="nowPlayingTime">{pad(minutesPlayed)}:{pad(secondsPlayed)} / {pad(minutesTotal)}:{pad(secondsTotal)}</div>
               </div>
             </div>
             <div className="flex items-center justify-end  w-1/3">
-              <button className="btn-queue cursor-pointer" type="button" aria-label="Open Queue"><ListMusic /></button>
+              <button className="btn-queue" type="button" aria-label="Open Queue"><ListMusic /></button>
             </div>
           </div>
         </div>

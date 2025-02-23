@@ -12,6 +12,8 @@
 }
 
 @import './components/header';
+@import './components/buttons';
+@import './components/tabs';
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,

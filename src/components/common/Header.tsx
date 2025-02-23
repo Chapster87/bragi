@@ -30,7 +30,7 @@ export default function Header() {
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
               {/* Mobile menu button */}
               <button type="button"
-                className="relative inline-flex items-center justify-center rounded-md p-2 text-slate-400 hover:bg-slate-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset cursor-pointer"
+                className="relative inline-flex items-center justify-center rounded-md p-2 text-slate-400 hover:bg-slate-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset"
                 aria-controls="mobile-menu"
                 aria-expanded="false"
                 onClick={() => setMobileMenuActive(!mobileMenuActive)}
@@ -65,7 +65,7 @@ export default function Header() {
               <div className="relative ml-3">
                 <div>
                   <button type="button"
-                    className="relative flex rounded-full bg-slate-900 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-900 focus:outline-hidden cursor-pointer"
+                    className="relative flex rounded-full bg-slate-900 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-900 focus:outline-hidden"
                     id="user-menu-button"
                     aria-expanded="false"
                     aria-haspopup="true"

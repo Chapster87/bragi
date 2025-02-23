@@ -2,11 +2,13 @@
 
 import { useEffect } from 'react';
 import Header from '@/components/common/Header';
+import { Tab, TabsBody, TabsHeader, TabPanel, Tabs } from '@/components/common/Tabs';
 import TopTracks from '@/components/TopTracks';
 import UserQueue from '@/components/UserQueue';
 import ControlBar from '@/components/ControlBar';
 
 import Spotify from '@/services/spotify'
+
 
 export default function Home() {
 
@@ -26,7 +28,20 @@ export default function Home() {
           
         </div>
         <div className="w-1/5 rounded bg-slate-700 p-3">
-          <UserQueue />
+          <Tabs>
+            <TabsHeader>
+              <Tab>Queue</Tab>
+              <Tab>History</Tab>
+            </TabsHeader>
+            <TabsBody>
+              <TabPanel>
+                <UserQueue />
+              </TabPanel>
+              <TabPanel>
+                Listen History
+              </TabPanel>
+            </TabsBody>
+          </Tabs>
         </div>
       </main>
       <ControlBar />
