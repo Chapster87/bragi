@@ -89,33 +89,23 @@ export default class Spotify {
   };
 
   async fetchProfile(): Promise<UserProfile> {
-    try {
-      const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('access_token');
 
-      const result = await fetch("https://api.spotify.com/v1/me", {
-        method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
-      });
+    const result = await fetch("https://api.spotify.com/v1/me", {
+      method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
+    });
 
-      return await result.json();
-    } catch (error) {
-      console.error('Error fetching profile: ', error);
-      return error.message.toString();
-    }
+    return await result.json();
   }
 
   async fetchTopTracks(): Promise<TopTracks> {
-    try {
-      const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('access_token');
 
-      const result = await fetch("https://api.spotify.com/v1/me/top/tracks", {
-        method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
-      });
-    
-      return await result.json();
-    } catch (error) {
-      console.error('Error fetching top tracks: ', error);
-      return error.message.toString();
-    }
+    const result = await fetch("https://api.spotify.com/v1/me/top/tracks", {
+      method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
+    });
+  
+    return await result.json();
   }
 
   async fetchNowPlaying(): Promise<Track> {
@@ -163,18 +153,13 @@ export default class Spotify {
   }
 
   async play() {
-    try {
-      const accessToken = localStorage.getItem('access_token');
-      const response = await fetch("https://api.spotify.com/v1/me/player/play", {
-        method: "PUT", headers: { Authorization: `Bearer ${accessToken}` }
-      });
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch("https://api.spotify.com/v1/me/player/play", {
+      method: "PUT", headers: { Authorization: `Bearer ${accessToken}` }
+    });
 
-      if (response.status > 400) {
-        throw new Error('Unable to resume/play');
-      }
-    } catch (error) {
-      console.error('Error resume/play: ', error);
-      return error.message.toString();
+    if (response.status > 400) {
+      throw new Error('Unable to resume/play');
     }
   }
 
@@ -192,50 +177,35 @@ export default class Spotify {
   }
 
   async pause() {
-    try {
-      const accessToken = localStorage.getItem('access_token');
-      const response = await fetch("https://api.spotify.com/v1/me/player/pause", {
-        method: "PUT", headers: { Authorization: `Bearer ${accessToken}` }
-      });
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch("https://api.spotify.com/v1/me/player/pause", {
+      method: "PUT", headers: { Authorization: `Bearer ${accessToken}` }
+    });
 
-      if (response.status > 400) {
-        throw new Error('Unable to pause playback');
-      }
-    } catch (error) {
-      console.error('Error pausing playback: ', error);
-      return error.message.toString();
+    if (response.status > 400) {
+      throw new Error('Unable to pause playback');
     }
   }
 
   async skipPrev() {
-    try {
-      const accessToken = localStorage.getItem('access_token');
-      const response = await fetch("https://api.spotify.com/v1/me/player/previous", {
-        method: "POST", headers: { Authorization: `Bearer ${accessToken}` }
-      });
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch("https://api.spotify.com/v1/me/player/previous", {
+      method: "POST", headers: { Authorization: `Bearer ${accessToken}` }
+    });
 
-      if (response.status > 400) {
-        throw new Error('Unable to skip to previous');
-      }
-    } catch (error) {
-      console.error('Error skipping to previous: ', error);
-      return error.message.toString();
+    if (response.status > 400) {
+      throw new Error('Unable to skip to previous');
     }
   }
 
   async skipNext() {
-    try {
-      const accessToken = localStorage.getItem('access_token');
-      const response = await fetch("https://api.spotify.com/v1/me/player/next", {
-        method: "POST", headers: { Authorization: `Bearer ${accessToken}` }
-      });
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch("https://api.spotify.com/v1/me/player/next", {
+      method: "POST", headers: { Authorization: `Bearer ${accessToken}` }
+    });
 
-      if (response.status > 400) {
-        throw new Error('Unable to skip to next');
-      }
-    } catch (error) {
-      console.error('Error skipping to next: ', error);
-      return error.message.toString();
+    if (response.status > 400) {
+      throw new Error('Unable to skip to next');
     }
   }
 }
