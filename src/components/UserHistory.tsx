@@ -11,7 +11,6 @@ export default function UserHistory() {
     const getHistory = async () => {
     spotify.fetchUserHistory()
       .then(response => {
-        console.log('history', response);
         setHistory(response);
       });
     };

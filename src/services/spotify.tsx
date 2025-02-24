@@ -178,6 +178,19 @@ export default class Spotify {
     }
   }
 
+  async playSpecificTrack(trackUri: string) {
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch("https://api.spotify.com/v1/me/player/play", {
+      method: "PUT", 
+      headers: { Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ uris: [trackUri] })
+    });
+
+    if (response.status > 400) {
+      throw new Error('Unable to resume/play selected track');
+    }
+  }
+
   async pause() {
     try {
       const accessToken = localStorage.getItem('access_token');
