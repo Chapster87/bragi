@@ -12,7 +12,7 @@ export default function Track({ track }) {
   }
 
   return (
-    <button className=" flex items-center w-full group" type="button" onClick={() => playTrack(track.uri)} aria-label="Play Track" key={track.id}>
+    <button className="flex items-center w-full group" data-uri={track.uri} type="button" onClick={() => playTrack(track.uri)} aria-label="Play Track" key={track.id}>
       <figure className="flex items-center justify-start">
         <div className="relative rounded overflow-hidden">
           <Image src={track.album.images[0].url} alt={track.name} width={60} height={60} />

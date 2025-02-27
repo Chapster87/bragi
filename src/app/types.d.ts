@@ -1,6 +1,4 @@
-interface TopTracks {
-
-}
+interface TopTracks {}
 
 interface UserProfile {
   country: string;
@@ -25,6 +23,8 @@ interface NowPlaying {
   progress_ms: number;
   is_playing: boolean;
 }
+
+interface Playlist {}
 
 interface Image {
   url: string;

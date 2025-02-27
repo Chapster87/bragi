@@ -11,7 +11,6 @@ export default function TopTracks() {
   useEffect(() => {
     spotify.fetchTopTracks()
       .then(response => {
-        console.log(response);
         setTracks(response.items);
       });
   }, []);
