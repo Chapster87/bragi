@@ -11,10 +11,12 @@ export default class Spotify {
     this.clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
     this.clientSecret = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET;
     this.refreshToken = process.env.NEXT_PUBLIC_SPOTIFY_REFRESH_TOKEN;
-    this.params = new URLSearchParams(window.location.search);
-    this.code = this.params.get("code");
-    this.redirectUri = "http://localhost:3000/";
-    this.scope = 'user-read-private user-read-email user-top-read user-read-currently-playing user-read-recently-played user-read-playback-state user-modify-playback-state'
+    if (typeof window !== "undefined") {
+      this.params = new URLSearchParams(window.location.search);
+      this.code = this.params.get("code");
+      this.redirectUri = "http://localhost:3000/";
+      this.scope = 'streaming user-read-private user-read-email user-top-read user-read-currently-playing user-read-recently-played user-read-playback-state user-modify-playback-state playlist-read-private'
+    }
   }
 
   async auth() {
@@ -34,16 +36,18 @@ export default class Spotify {
     const codeChallenge = await this.generateCodeChallenge(verifier);
     const scope = this.scope;
     const authUrl = new URL("https://accounts.spotify.com/authorize");
+    const state = this.generateCodeVerifier(16)
 
     localStorage.setItem("code_verifier", verifier);
 
     const params = new URLSearchParams({
       response_type: 'code',
       client_id: this.clientId || '',
-      scope,
+      scope: scope,
       code_challenge_method: 'S256',
       code_challenge: codeChallenge,
       redirect_uri: this.redirectUri,
+      state: state
     });
 
     authUrl.search = params.toString();
@@ -87,9 +91,23 @@ export default class Spotify {
 
     return response.json();
   };
+  
+  async getToken() {
+    let accessToken = null
+
+    if (typeof window !== 'undefined') {
+      accessToken = localStorage.getItem('access_token');
+    }
+
+    return accessToken;
+  }
 
   async fetchProfile(): Promise<UserProfile> {
-    const accessToken = localStorage.getItem('access_token');
+    let accessToken = null
+
+    if (typeof window !== 'undefined') {
+      accessToken = localStorage.getItem('access_token');
+    }
 
     const result = await fetch("https://api.spotify.com/v1/me", {
       method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
@@ -98,10 +116,38 @@ export default class Spotify {
     return await result.json();
   }
 
+  async fetchAvailableDevices() {
+    let accessToken = null
+
+    if (typeof window !== 'undefined') {
+      accessToken = localStorage.getItem('access_token');
+    }
+
+    const result = await fetch("https://api.spotify.com/v1/me/player/devices", {
+      method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
+    });
+  
+    return await result.json();
+  }
+
   async fetchTopTracks(): Promise<TopTracks> {
-    const accessToken = localStorage.getItem('access_token');
+    let accessToken = null
+
+    if (typeof window !== 'undefined') {
+      accessToken = localStorage.getItem('access_token');
+    }
 
     const result = await fetch("https://api.spotify.com/v1/me/top/tracks", {
+      method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
+    });
+  
+    return await result.json();
+  }
+
+  async fetchUserPlaylists(): Promise<Playlist> {
+    const accessToken = localStorage.getItem('access_token');
+
+    const result = await fetch("https://api.spotify.com/v1/me/playlists", {
       method: "GET", headers: { Authorization: `Bearer ${accessToken}` }
     });
   
