@@ -9,8 +9,8 @@ export default function TrackTimer() {
     secondsPlayed: 0,
     minutesTotal: 0,
     secondsTotal: 0,
-    timePlayed: 0,
-    timeTotal: 0
+    timePlayedSeconds: 0,
+    timeTotalSeconds: 0
   });
 
   useEffect(() => {
@@ -19,8 +19,8 @@ export default function TrackTimer() {
           .then(response => {
             setTimer({
               ...timer,
-              timePlayed: response.progress_ms,
-              timeTotal: response.item.duration_ms,
+              timePlayedSeconds: Math.floor(response.progress_ms/1000),
+              timeTotalSeconds: Math.floor((response.item.duration_ms || 0) / 1000),
               secondsPlayed: Math.floor(response.progress_ms/1000)%60,
               minutesPlayed: Math.floor(Math.floor(response.progress_ms/1000)/60),
               secondsTotal: Math.floor((response.item.duration_ms || 0) / 1000)%60,
@@ -39,7 +39,18 @@ export default function TrackTimer() {
     return (n < 10) ? ("0" + n) : n;
   }
 
+  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const seekTo = Number(event.target.value) * 1000;
+    spotify.seekToPosition(seekTo);
+  }
+
+  const seekBeforeWidth = { "--seek-before-width": `${timer.timePlayedSeconds / timer.timeTotalSeconds * 100}%` } as React.CSSProperties;
+
   return (
-    <div className="nowPlayingTime">{pad(timer.minutesPlayed)}:{pad(timer.secondsPlayed)} / {pad(timer.minutesTotal)}:{pad(timer.secondsTotal)}</div>
+    <div className="track-timer w-full flex items-center">
+      <div className="current-time text-sm mr-2">{pad(timer.minutesPlayed)}:{pad(timer.secondsPlayed)}</div>
+      <div className="scrobbler w-full flex items-center" style={seekBeforeWidth}><input type="range" className="w-full" id="seek-slider" max={timer.timeTotalSeconds} value={timer.timePlayedSeconds} onChange={handleSliderChange} /></div>
+      <div className="total-time text-sm ml-2">{pad(timer.minutesTotal)}:{pad(timer.secondsTotal)}</div>
+    </div>
   )
 }

@@ -254,4 +254,16 @@ export default class Spotify {
       throw new Error('Unable to skip to next');
     }
   }
+
+  async seekToPosition(position: number) {
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${position}`, {
+      method: "PUT", 
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    if (response.status > 400) {
+      throw new Error('Unable to seek to position');
+    }
+  }
 }

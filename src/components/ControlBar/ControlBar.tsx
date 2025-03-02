@@ -15,17 +15,15 @@ export default function ControlBar({ playerSDK }) {
 
   useEffect(() => {
     if (playerSDK) {
-      playerSDK.addListener('ready', ({ device_id }) => {
+      playerSDK.addListener('ready', () => {
         spotify.fetchAvailableDevices()
           .then(response => {
-            console.log("Devices after", response.devices);
             setDevices(response.devices);
           });
       });
     } else {
       spotify.fetchAvailableDevices()
         .then(response => {
-          console.log("Devices before:", response.devices);
           setDevices(response.devices);
         });
     }
@@ -34,7 +32,7 @@ export default function ControlBar({ playerSDK }) {
   let activeDevice = null;
 
   if (devices?.length > 0) {
-    activeDevice = devices?.find(device => device.is_active === true);
+    activeDevice = devices?.find((device: Device) => device.is_active === true);
   }
 
   return (
@@ -45,7 +43,7 @@ export default function ControlBar({ playerSDK }) {
         </div>
         <div className="flex flex-col items-center justify-center w-1/3">
           <PlaybackControls playerSDK={playerSDK} />
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center w-full">
             <TrackTimer />
           </div>
         </div>
